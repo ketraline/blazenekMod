@@ -1,0 +1,17 @@
+{
+	"id": "blazenekmod",
+	"name": "BlazenekMod",
+	"display_name": "CFM",
+	"author": ["ketraline", "TRONEK", "theswaghaver"],
+	"description": "THE BEST BALATRO MOD EVER",
+	"prefix": "clownfish",
+	"main_file": "main.lua",
+	"priority": 0,
+	"badge_colour": "9127F5",
+	"badge_text_colour": "F5E727",
+	"version": "1.0.0",
+	"dependencies": [
+		"Steamodded (>=1.*)",
+		"Lovely (>=0.6)"
+	]
+}
