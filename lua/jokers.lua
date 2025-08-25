@@ -89,44 +89,49 @@ SMODS.Joker {
     end
 }
 
--- TODO: fix
 SMODS.Joker {
 	key = 'eggsnbacey',
 	loc_txt = {
 		name = 'Eggs and Bacey',
 		text = {
 			"Sell value increases by 2 at the end of blind,",
-			"and adds 8x it's sell value as chips.",
+			"and adds 4x it's sell value as chips.",
             "Currently {C:blue}+#1#{}"
 		}
 	},
 	rarity = 1,
-    config = {extra = {chips = 16}},
+    config = {extra = { price = 2, chips = 8, chip_mod = 8}},
 	atlas = 'clownfish',
+    blueprint_compat = false,
 	pos = { x = 2, y = 0 },
 	cost = 4,
 
     loc_vars = function(self, info_queue, center)
-		return { vars = { center.ability.extra.chips }  }
+		return {
+            vars = { center.ability.extra.chips }
+        }
 	end,
 
 	calculate = function(self, card, context)
-        local count = 0 
-        local chipPlus = count * 8 
-        if context.setting_blind then
-            card.base_cost = card.base_cost + 4
-        end
-        if context.end_of_round then
-            count = count + 2
-            card.config.extra.chips = chipPlus
-            return {message = "+$2!"}
-        end
-		if context.joker_main then
+        if context.joker_main then
             return{
-                chip_mod = chipPlus,
-                message = "Wakey wakey! + "..chipPlus.."!"
+                chips = card.ability.extra.chips
+            }
+        end
+        if context.end_of_round and context.game_over == false and context.main_eval then
+            card.ability.extra_value = card.ability.extra_value + card.ability.extra.price
+            card:set_cost()
+            card.ability.extra.chips = card.ability.extra.chips + card.ability.extra.chip_mod
+            for i = 1, #G.jokers.cards do
+                if G.jokers.cards[i].ability.name == "Gift Card" then
+                    card.ability.extra.chips = card.ability.extra.chips + 4
+                    print("gift")
+                end
+            end
+            
+            return {
+                message = "+$2!",
             }
         end
     end
 }
-
